@@ -29,7 +29,7 @@ interface Child {
   rank: 'INICIADO' | 'VALIENTE' | 'SABIO' | 'MAESTRO';
   initiationCompleted: boolean;
   requiresParentAssistance: boolean;
-  secretCode: string;
+  secretCode?: string;
   archangel: {
     id: string;
     nameEs: string;
@@ -37,7 +37,7 @@ interface Child {
     colorHex: string;
     illustrationUrl?: string;
   };
-  createdAt: string;
+  createdAt?: string;
 }
 
 export default function ChildDetailPage() {
@@ -114,11 +114,13 @@ export default function ChildDetailPage() {
 
   const rankBadge = getRankBadge(child.rank);
   const assistanceMode = getAssistanceMode(child.requiresParentAssistance, child.age);
-  const memberSince = new Date(child.createdAt).toLocaleDateString('es-ES', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
+  const memberSince = child.createdAt
+    ? new Date(child.createdAt).toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })
+    : 'Fecha no disponible';
 
   return (
     <div className="space-y-6">
@@ -222,20 +224,22 @@ export default function ChildDetailPage() {
         {/* Left Column - Settings & Info */}
         <div className="lg:col-span-1 space-y-6">
           {/* Secret Code Card */}
-          <Card className="p-6 bg-gradient-to-br from-primary-50 to-gold-50">
-            <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
-              <Shield className="w-5 h-5 mr-2 text-primary-600" />
-              Código Secreto
-            </h3>
-            <div className="bg-white rounded-lg p-4 text-center border-2 border-dashed border-primary-300">
-              <p className="text-3xl font-mono font-bold text-primary-700 tracking-widest">
-                {child.secretCode}
-              </p>
-              <p className="text-xs text-gray-600 mt-2">
-                Comparte este código con tu hijo para que pueda ingresar
-              </p>
-            </div>
-          </Card>
+          {child.secretCode && (
+            <Card className="p-6 bg-gradient-to-br from-primary-50 to-gold-50">
+              <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
+                <Shield className="w-5 h-5 mr-2 text-primary-600" />
+                Código Secreto
+              </h3>
+              <div className="bg-white rounded-lg p-4 text-center border-2 border-dashed border-primary-300">
+                <p className="text-3xl font-mono font-bold text-primary-700 tracking-widest">
+                  {child.secretCode}
+                </p>
+                <p className="text-xs text-gray-600 mt-2">
+                  Comparte este código con tu hijo para que pueda ingresar
+                </p>
+              </div>
+            </Card>
+          )}
 
           {/* Safety Settings Card */}
           <Card className="p-6">
@@ -291,7 +295,7 @@ export default function ChildDetailPage() {
         {/* Right Column - Activity & Progress */}
         <div className="lg:col-span-2 space-y-6">
           {/* Progress Card */}
-          {!child.initiationCompleted && (
+          {!child.initiationCompleted && child.secretCode && (
             <Card className="p-6 bg-gradient-to-br from-gold-50 to-gold-100 border-gold-300">
               <div className="flex items-start space-x-4">
                 <div className="p-3 bg-gold-500 rounded-full">
