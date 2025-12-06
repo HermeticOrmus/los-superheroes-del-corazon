@@ -20,7 +20,7 @@ export const MOCK_CHILDREN = [
     rank: 'VALIENTE' as const,
     initiationCompleted: true,
     requiresParentAssistance: true,
-    secretCode: 'AMAR333',
+    secretCode: 'AMOR33',
     archangel: {
       nameEs: 'Arcángel Miguel',
       colorHex: '#ef4444',
@@ -36,7 +36,7 @@ export const MOCK_CHILDREN = [
     rank: 'SABIO' as const,
     initiationCompleted: true,
     requiresParentAssistance: false,
-    secretCode: 'DIEGO456',
+    secretCode: 'DIEGO4',
     archangel: {
       nameEs: 'Arcángel Gabriel',
       colorHex: '#3b82f6',
@@ -52,7 +52,7 @@ export const MOCK_CHILDREN = [
     rank: 'INICIADO' as const,
     initiationCompleted: false,
     requiresParentAssistance: true,
-    secretCode: 'BELLA789',
+    secretCode: 'BELLA7',
     archangel: {
       nameEs: 'Arcángel Rafael',
       colorHex: '#10b981',
