@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Users, Bell, Settings, Heart, LogOut } from 'lucide-react';
+import { Home, Users, Bell, Settings, Heart, LogOut, Target, Gift } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function DashboardLayout({
@@ -16,6 +16,8 @@ export default function DashboardLayout({
   const navigation = [
     { name: 'Panel General', href: '/dashboard', icon: Home },
     { name: 'Mis Hijos', href: '/dashboard/children', icon: Users },
+    { name: 'Misiones', href: '/dashboard/missions', icon: Target },
+    { name: 'Recompensas', href: '/dashboard/rewards', icon: Gift },
     { name: 'Notificaciones', href: '/dashboard/notifications', icon: Bell },
     { name: 'Configuración', href: '/dashboard/settings', icon: Settings },
   ];
