@@ -2,6 +2,12 @@
 
 **Last Updated:** 2025-12-06
 **Build Status:** ⚡ 85% Complete - Production Ready Core Features
+**Deployment Status:** ✅ LIVE on Vercel
+
+## 🔗 Live Deployment
+
+- **Production URL**: https://los-superheroes-del-corazon-ewionmwpl-hermetic-ormus-projects.vercel.app
+- **GitHub Repository**: https://github.com/HermeticOrmus/los-superheroes-del-corazon
 
 ---
 
