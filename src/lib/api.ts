@@ -41,10 +41,12 @@ interface Child {
   rank: 'INICIADO' | 'VALIENTE' | 'SABIO' | 'MAESTRO';
   initiationCompleted: boolean;
   requiresParentAssistance: boolean;
+  secretCode?: string;
   archangel: {
     nameEs: string;
     colorHex: string;
   };
+  createdAt?: string;
 }
 
 interface Notification {
