@@ -57,7 +57,6 @@ async function apiRequest<T>(
 
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    ...options.headers,
   };
 
   if (token) {
@@ -66,7 +65,10 @@ async function apiRequest<T>(
 
   const response = await fetch(`${API_URL}${endpoint}`, {
     ...options,
-    headers,
+    headers: {
+      ...headers,
+      ...(options.headers as Record<string, string> || {}),
+    },
   });
 
   const data = await response.json();
