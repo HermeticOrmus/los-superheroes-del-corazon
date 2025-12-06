@@ -15,7 +15,7 @@ import {
   Lock,
   Sparkles,
 } from 'lucide-react';
-import { missionsApi, childrenApi } from '@/lib/api';
+import { missionsApi, childrenApi, challengesApi } from '@/lib/api';
 
 interface Mission {
   id: string;
@@ -61,12 +61,12 @@ export default function MissionsPage() {
   const loadMissionData = async () => {
     try {
       // Load current mission
-      const mission = await missionsApi.getCurrent();
+      const mission = await missionsApi.getCurrentMission();
       setCurrentMission(mission);
 
       // Load challenges for this mission
       if (mission) {
-        const missionChallenges = await missionsApi.getChallenges(mission.id);
+        const missionChallenges = await challengesApi.getForMission(mission.id);
         setChallenges(missionChallenges.sort((a: Challenge, b: Challenge) => a.weekNumber - b.weekNumber));
       }
 

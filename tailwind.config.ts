@@ -11,42 +11,66 @@ const config: Config = {
   	extend: {
   		colors: {
   			primary: {
-  				'50': '#fef2f2',
-  				'100': '#fee2e2',
-  				'200': '#fecaca',
-  				'300': '#fca5a5',
-  				'400': '#f87171',
-  				'500': '#ef4444',
-  				'600': '#dc2626',
-  				'700': '#b91c1c',
-  				'800': '#991b1b',
-  				'900': '#7f1d1d',
+  				'50': '#e6fffa',
+  				'100': '#b2f5ea',
+  				'200': '#81e6d9',
+  				'300': '#4fd1c5',
+  				'400': '#38b2ac',
+  				'500': '#00D4B8',
+  				'600': '#00a896',
+  				'700': '#007f6d',
+  				'800': '#005f52',
+  				'900': '#004038',
   				DEFAULT: 'hsl(var(--primary))',
   				foreground: 'hsl(var(--primary-foreground))'
   			},
-  			dorado: {
-  				'50': '#fffbeb',
-  				'100': '#fef3c7',
-  				'200': '#fde68a',
-  				'300': '#fcd34d',
-  				'400': '#fbbf24',
-  				'500': '#f59e0b',
-  				'600': '#d97706',
-  				'700': '#b45309',
-  				'800': '#92400e',
-  				'900': '#78350f'
+  			sunshine: {
+  				'50': '#fffef0',
+  				'100': '#fffacc',
+  				'200': '#fff699',
+  				'300': '#fff066',
+  				'400': '#ffe933',
+  				'500': '#FFD93D',
+  				'600': '#e6c300',
+  				'700': '#b39800',
+  				'800': '#806d00',
+  				'900': '#4d4100'
   			},
-  			azul: {
-  				'50': '#eff6ff',
-  				'100': '#dbeafe',
-  				'200': '#bfdbfe',
-  				'300': '#93c5fd',
-  				'400': '#60a5fa',
-  				'500': '#3b82f6',
-  				'600': '#2563eb',
-  				'700': '#1d4ed8',
-  				'800': '#1e40af',
-  				'900': '#1e3a8a'
+  			naranja: {
+  				'50': '#fff4ed',
+  				'100': '#ffe4d1',
+  				'200': '#ffc8a3',
+  				'300': '#ffa66b',
+  				'400': '#ff8c42',
+  				'500': '#FF8C42',
+  				'600': '#e65100',
+  				'700': '#b33d00',
+  				'800': '#802c00',
+  				'900': '#4d1a00'
+  			},
+  			rosa: {
+  				'50': '#fff5fb',
+  				'100': '#ffe5f5',
+  				'200': '#ffcceb',
+  				'300': '#ffb3d9',
+  				'400': '#ff99cc',
+  				'500': '#FFB3D9',
+  				'600': '#e680b3',
+  				'700': '#b3508d',
+  				'800': '#803367',
+  				'900': '#4d1f3d'
+  			},
+  			purpura: {
+  				'50': '#faf5ff',
+  				'100': '#f3e8ff',
+  				'200': '#e9d5ff',
+  				'300': '#d8b4fe',
+  				'400': '#c084fc',
+  				'500': '#B366FF',
+  				'600': '#9333ea',
+  				'700': '#7c1fb8',
+  				'800': '#5e1686',
+  				'900': '#3f0e5a'
   			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -87,14 +111,17 @@ const config: Config = {
   		},
   		fontFamily: {
   			sans: [
-  				'var(--font-inter)',
+  				'Inter',
   				'system-ui',
   				'sans-serif'
   			],
   			display: [
-  				'var(--font-display)',
-  				'system-ui',
-  				'sans-serif'
+  				'Caveat',
+  				'cursive'
+  			],
+  			handwritten: [
+  				'Caveat',
+  				'cursive'
   			]
   		},
   		borderRadius: {

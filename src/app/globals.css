@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,29 +12,29 @@
     --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
-    /* Primary: Bright Red (Superhéroe energy) */
-    --primary: 0 84% 60%;
+    /* Primary: Turquoise (Heart, La Gran Obra) */
+    --primary: 174 100% 42%;
     --primary-foreground: 0 0% 100%;
-    /* Secondary: Golden (Alquimia transformation) */
-    --secondary: 38 92% 50%;
+    /* Secondary: Sunshine Yellow (Joy, Light, Sol) */
+    --secondary: 48 100% 61%;
     --secondary-foreground: 26 83% 14%;
     --muted: 210 40% 96%;
     --muted-foreground: 215 16% 47%;
-    /* Accent: Bright Blue (Wisdom) */
-    --accent: 217 91% 60%;
+    /* Accent: Purple (Spirituality, Transformation) */
+    --accent: 262 100% 70%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     --border: 214 32% 91%;
     --input: 214 32% 91%;
-    --ring: 0 84% 60%;
-    --radius: 0.75rem;
-    /* Chart colors: Bright Superhéroe palette */
-    --chart-1: 0 84% 60%;      /* Red */
-    --chart-2: 38 92% 50%;     /* Gold */
-    --chart-3: 217 91% 60%;    /* Blue */
-    --chart-4: 142 76% 36%;    /* Green */
-    --chart-5: 262 83% 58%;    /* Purple */
+    --ring: 174 100% 42%;
+    --radius: 1rem;
+    /* Chart colors: La Gran Obra palette */
+    --chart-1: 174 100% 42%;   /* Turquoise */
+    --chart-2: 48 100% 61%;    /* Sunshine Yellow */
+    --chart-3: 22 100% 63%;    /* Vibrant Orange */
+    --chart-4: 330 100% 82%;   /* Soft Pink */
+    --chart-5: 262 100% 70%;   /* Purple */
   }
 
   .dark {
@@ -69,6 +71,11 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
   }
 }

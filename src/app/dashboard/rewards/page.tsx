@@ -79,7 +79,7 @@ export default function RewardsPage() {
 
     try {
       setRedeeming(rewardId);
-      await rewardsApi.redeem(rewardId, selectedChild);
+      await rewardsApi.redeem(rewardId, { childId: selectedChild });
       alert('¡Recompensa canjeada con éxito!');
       loadData(); // Reload to update points
     } catch (error: any) {
