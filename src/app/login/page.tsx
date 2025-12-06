@@ -12,10 +12,13 @@ type LoginMode = 'parent' | 'child';
 export default function LoginPage() {
   const { login, loginChild } = useAuth();
   const [mode, setMode] = useState<LoginMode>('parent');
+
+  // Pre-populate credentials in dev mode for easy testing
+  const isDevMode = process.env.NEXT_PUBLIC_DEV_MODE === 'true';
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    secretCode: '',
+    email: isDevMode ? 'amoryvida@gmail.com' : '',
+    password: isDevMode ? 'password123' : '',
+    secretCode: isDevMode ? 'AMAR333' : '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -82,7 +85,11 @@ export default function LoginPage() {
             onClick={() => {
               setMode('parent');
               setError('');
-              setFormData({ email: '', password: '', secretCode: '' });
+              setFormData({
+                email: isDevMode ? 'amoryvida@gmail.com' : '',
+                password: isDevMode ? 'password123' : '',
+                secretCode: ''
+              });
             }}
             className={`flex-1 py-2.5 rounded-md font-medium transition-all ${
               mode === 'parent'
@@ -97,7 +104,11 @@ export default function LoginPage() {
             onClick={() => {
               setMode('child');
               setError('');
-              setFormData({ email: '', password: '', secretCode: '' });
+              setFormData({
+                email: '',
+                password: '',
+                secretCode: isDevMode ? 'AMAR333' : ''
+              });
             }}
             className={`flex-1 py-2.5 rounded-md font-medium transition-all ${
               mode === 'child'
@@ -112,6 +123,15 @@ export default function LoginPage() {
         {/* Login Card */}
         <Card className="p-8 shadow-xl">
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Dev Mode Notice */}
+            {isDevMode && (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <p className="text-sm text-green-800 text-center">
+                  ✨ <strong>Modo Demo:</strong> Credenciales pre-cargadas. Solo presiona "Iniciar Sesión"
+                </p>
+              </div>
+            )}
+
             {/* Error Message */}
             {error && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start space-x-3">
