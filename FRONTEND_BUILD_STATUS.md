@@ -7,9 +7,10 @@
 
 ## 🔗 Live Deployment
 
-- **Production URL**: https://los-superheroes-del-corazon-e22w3y6je-hermetic-ormus-projects.vercel.app
+- **Production URL**: https://los-superheroes-del-corazon.vercel.app
 - **GitHub Repository**: https://github.com/HermeticOrmus/los-superheroes-del-corazon
 - **Last Updated**: 2025-12-06 18:23 UTC - Dev mode fixed and working (environment variable newline issue resolved)
+- **Public Access**: No login required - share this URL with anyone
 
 ---
 

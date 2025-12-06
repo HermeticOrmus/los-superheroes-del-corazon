@@ -6,9 +6,9 @@
 
 ## 📍 Production URL
 
-**https://los-superheroes-del-corazon-e22w3y6je-hermetic-ormus-projects.vercel.app**
+**https://los-superheroes-del-corazon.vercel.app**
 
-_(Updated: 2025-12-06 18:23 UTC - Fixed environment variable, dev mode now working)_
+_(Public URL - No login required | Updated: 2025-12-06 18:23 UTC)_
 
 ---
 
@@ -175,8 +175,8 @@ Just open the link and tap "Iniciar Sesión"!
 
 ## 🔗 Quick Links
 
-- **Production:** https://los-superheroes-del-corazon-e22w3y6je-hermetic-ormus-projects.vercel.app
-- **Onboarding Demo:** https://los-superheroes-del-corazon-e22w3y6je-hermetic-ormus-projects.vercel.app/onboarding/BELLA789
+- **Production:** https://los-superheroes-del-corazon.vercel.app
+- **Onboarding Demo:** https://los-superheroes-del-corazon.vercel.app/onboarding/BELLA789
 - **Documentation:** See `DEV_MODE.md` for full technical details
 
 ---

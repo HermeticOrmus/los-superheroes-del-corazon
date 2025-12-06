@@ -11,7 +11,7 @@
 
 ### 🔗 Enlaces Importantes
 
-- **Producción:** https://los-superheroes-del-corazon-ewionmwpl-hermetic-ormus-projects.vercel.app
+- **Producción:** https://los-superheroes-del-corazon.vercel.app _(Público - No requiere login)_
 - **Repositorio:** https://github.com/HermeticOrmus/los-superheroes-del-corazon
 - **Dev Mode Guide:** [DEV_MODE.md](./DEV_MODE.md)
 - **Frontend Status:** [FRONTEND_BUILD_STATUS.md](./FRONTEND_BUILD_STATUS.md)
