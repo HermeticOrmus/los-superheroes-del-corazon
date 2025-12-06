@@ -31,11 +31,8 @@ interface Child {
   requiresParentAssistance: boolean;
   secretCode?: string;
   archangel: {
-    id: string;
     nameEs: string;
-    power: string;
     colorHex: string;
-    illustrationUrl?: string;
   };
   createdAt?: string;
 }
@@ -275,19 +272,15 @@ export default function ChildDetailPage() {
               Arcángel Protector
             </h3>
             <div className="text-center">
-              <h4 className="text-xl font-bold mb-2" style={{ color: child.archangel.colorHex }}>
+              <h4 className="text-xl font-bold mb-4" style={{ color: child.archangel.colorHex }}>
                 {child.archangel.nameEs}
               </h4>
-              <p className="text-sm text-gray-600 mb-4">
-                Poder: {child.archangel.power}
-              </p>
-              {child.archangel.illustrationUrl && (
-                <img
-                  src={child.archangel.illustrationUrl}
-                  alt={child.archangel.nameEs}
-                  className="w-full h-48 object-cover rounded-lg"
-                />
-              )}
+              <div
+                className="w-24 h-24 rounded-full mx-auto flex items-center justify-center"
+                style={{ backgroundColor: `${child.archangel.colorHex}20` }}
+              >
+                <Shield className="w-12 h-12" style={{ color: child.archangel.colorHex }} />
+              </div>
             </div>
           </Card>
         </div>
