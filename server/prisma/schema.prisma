@@ -1,0 +1,477 @@
+// Neon Serverless Postgres + Prisma Schema
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// USERS & AUTHENTICATION
+// ============================================
+
+enum UserRole {
+  PARENT
+  CHILD
+  EDUCATOR
+  ADMIN
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  passwordHash  String
+  role          UserRole @default(PARENT)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  profile       Profile?
+  children      Child[]
+  subscription  Subscription?
+  notifications Notification[]
+
+  @@map("users")
+}
+
+model Profile {
+  id                String  @id @default(cuid())
+  userId            String  @unique
+  fullName          String
+  avatarUrl         String?
+  preferredLanguage String  @default("es")
+  timezone          String  @default("America/Mexico_City")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("profiles")
+}
+
+// ============================================
+// CHILDREN & ONBOARDING
+// ============================================
+
+enum ChildRank {
+  INICIADO  // Blanco/Plata
+  VALIENTE  // Rojo
+  SABIO     // Azul
+  MAESTRO   // Dorado
+}
+
+model Child {
+  id                   String    @id @default(cuid())
+  parentId             String
+  name                 String
+  age                  Int
+  secretCode           String    @unique // Código secreto único
+  superheroName        String    // "Corazón Valiente", etc.
+  archangelId          String
+  avatarUrl            String?
+  luzPoints            Int       @default(100) // Comienza con 100 puntos de bienvenida
+  rank                 ChildRank @default(INICIADO)
+  initiationCompleted  Boolean   @default(false)
+  countryCode          String?   // Para mapa mundial
+
+  // Safety & Parental Controls
+  requiresParentAssistance Boolean @default(true) // Auto-set based on age, parent can override
+  canBrowseCommunity       Boolean @default(false) // Can view other kids' posts
+  canPostToCommunity       Boolean @default(false) // Can create own posts
+  canViewGlobalMap         Boolean @default(true)  // Can see worldwide superhero map
+
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  // Relations
+  parent               User                      @relation(fields: [parentId], references: [id], onDelete: Cascade)
+  archangel            Archangel                 @relation(fields: [archangelId], references: [id])
+  missionProgress      ChildMissionProgress[]
+  challengeCompletions ChildChallengeCompletion[]
+  rewards              ChildReward[]
+  eventParticipations  EventParticipant[]
+  posts                CommunityPost[]
+  notifications        Notification[]
+
+  @@index([parentId])
+  @@index([secretCode])
+  @@map("children")
+}
+
+// ============================================
+// ARCHANGELS (GUARDIANES)
+// ============================================
+
+model Archangel {
+  id              String  @id @default(cuid())
+  nameEs          String
+  nameEn          String
+  power           String  // "Valentía y Protección"
+  colorHex        String
+  descriptionEs   String  @db.Text
+  descriptionEn   String  @db.Text
+  illustrationUrl String
+  order           Int     @unique
+
+  // Relations
+  children Child[]
+  missions MonthlyMission[]
+
+  @@map("archangels")
+}
+
+// ============================================
+// MISSIONS & CHALLENGES
+// ============================================
+
+model MonthlyMission {
+  id              String   @id @default(cuid())
+  year            Int
+  month           Int      // 1-12
+  titleEs         String
+  titleEn         String
+  descriptionEs   String   @db.Text
+  descriptionEn   String   @db.Text
+  videoRevealUrl  String   // Video de la Comandante Corazón
+  archangelId     String?  // Arcángel relacionado
+  startDate       DateTime
+  endDate         DateTime
+  createdAt       DateTime @default(now())
+
+  // Relations
+  archangel            Archangel?                @relation(fields: [archangelId], references: [id])
+  challenges           WeeklyChallenge[]
+  childProgress        ChildMissionProgress[]
+
+  @@unique([year, month])
+  @@index([startDate, endDate])
+  @@map("monthly_missions")
+}
+
+enum DifficultyLevel {
+  BLANCO  // Iniciado
+  ROJO    // Valiente
+  AZUL    // Sabio
+  DORADO  // Maestro
+}
+
+model WeeklyChallenge {
+  id                  String          @id @default(cuid())
+  missionId           String
+  weekNumber          Int             // 1-4
+  titleEs             String
+  titleEn             String
+  descriptionEs       String          @db.Text
+  descriptionEn       String          @db.Text
+  difficultyLevel     DifficultyLevel
+  luzPointsReward     Int             // Puntos por completar
+  requiredProofTypes  String[]        // ['photo', 'video', 'audio']
+  order               Int
+
+  // Relations
+  mission              MonthlyMission             @relation(fields: [missionId], references: [id], onDelete: Cascade)
+  completions          ChildChallengeCompletion[]
+
+  @@index([missionId])
+  @@map("weekly_challenges")
+}
+
+// ============================================
+// PROGRESS TRACKING
+// ============================================
+
+model ChildMissionProgress {
+  id                   String    @id @default(cuid())
+  childId              String
+  missionId            String
+  startedAt            DateTime  @default(now())
+  completedAt          DateTime?
+  completionPercentage Int       @default(0)
+
+  // Relations
+  child   Child          @relation(fields: [childId], references: [id], onDelete: Cascade)
+  mission MonthlyMission @relation(fields: [missionId], references: [id], onDelete: Cascade)
+
+  @@unique([childId, missionId])
+  @@index([childId])
+  @@map("child_mission_progress")
+}
+
+enum CompletionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model ChildChallengeCompletion {
+  id                String           @id @default(cuid())
+  childId           String
+  challengeId       String
+  proofUrls         String[]         // URLs de archivos subidos (Cloudinary)
+  proofType         String           // 'photo', 'video', 'audio'
+  submittedAt       DateTime         @default(now())
+  reviewedAt        DateTime?
+  status            CompletionStatus @default(PENDING)
+  moderatorNotes    String?          @db.Text
+  luzPointsAwarded  Int              @default(0)
+
+  // Relations
+  child     Child           @relation(fields: [childId], references: [id], onDelete: Cascade)
+  challenge WeeklyChallenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+
+  @@index([childId])
+  @@index([status])
+  @@map("child_challenge_completions")
+}
+
+// ============================================
+// REWARDS & GAMIFICATION
+// ============================================
+
+enum RewardType {
+  BADGE
+  PHYSICAL
+  DIGITAL
+  EXPERIENCE
+}
+
+enum RewardRarity {
+  COMMON
+  RARE
+  EPIC
+  LEGENDARY
+}
+
+model Reward {
+  id             String       @id @default(cuid())
+  type           RewardType
+  code           String       @unique
+  nameEs         String
+  nameEn         String
+  descriptionEs  String       @db.Text
+  descriptionEn  String       @db.Text
+  luzPointsCost  Int          // Costo en puntos Luz
+  iconUrl        String
+  rarity         RewardRarity
+  isRedeemable   Boolean      @default(true)
+  stockCount     Int?         // Para premios físicos limitados
+
+  // Relations
+  childRewards ChildReward[]
+
+  @@map("rewards")
+}
+
+enum RedemptionStatus {
+  PENDING
+  SHIPPED
+  DELIVERED
+}
+
+model ChildReward {
+  id               String             @id @default(cuid())
+  childId          String
+  rewardId         String
+  earnedAt         DateTime           @default(now())
+  redeemedAt       DateTime?
+  redemptionStatus RedemptionStatus?
+  shippingInfo     Json?              // { address, tracking, etc }
+  metadata         Json?
+
+  // Relations
+  child  Child  @relation(fields: [childId], references: [id], onDelete: Cascade)
+  reward Reward @relation(fields: [rewardId], references: [id])
+
+  @@index([childId])
+  @@map("child_rewards")
+}
+
+// ============================================
+// LIVE EVENTS
+// ============================================
+
+enum EventType {
+  MEDITATION
+  STORYTELLING
+  CEREMONY
+  SPECIAL_GUEST
+}
+
+model LiveEvent {
+  id              String    @id @default(cuid())
+  titleEs         String
+  titleEn         String
+  descriptionEs   String    @db.Text
+  descriptionEn   String    @db.Text
+  eventType       EventType
+  scheduledAt     DateTime
+  durationMinutes Int
+  videoUrl        String?   // Para streaming
+  isRecorded      Boolean   @default(false)
+  recordingUrl    String?
+  maxParticipants Int?
+  createdAt       DateTime  @default(now())
+
+  // Relations
+  participants EventParticipant[]
+
+  @@index([scheduledAt])
+  @@map("live_events")
+}
+
+model EventParticipant {
+  id               String    @id @default(cuid())
+  eventId          String
+  childId          String
+  registeredAt     DateTime  @default(now())
+  attended         Boolean   @default(false)
+  luzPointsAwarded Int       @default(100)
+
+  // Relations
+  event LiveEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  child Child     @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, childId])
+  @@index([childId])
+  @@map("event_participants")
+}
+
+// ============================================
+// COMMUNITY
+// ============================================
+
+enum PostType {
+  EXPERIENCE
+  QUESTION
+  CELEBRATION
+}
+
+enum ModerationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model CommunityPost {
+  id                String           @id @default(cuid())
+  authorId          String
+  content           String           @db.Text
+  mediaUrls         String[]
+  postType          PostType
+  moderationStatus  ModerationStatus @default(PENDING)
+  moderatedAt       DateTime?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  // Relations
+  author Child @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([authorId])
+  @@index([moderationStatus])
+  @@map("community_posts")
+}
+
+// ============================================
+// NOTIFICATIONS & COMMUNICATION
+// ============================================
+
+enum NotificationType {
+  MISSION_RELEASED      // Nueva misión del mes
+  CHALLENGE_COMPLETED   // Hijo completó un reto
+  RANK_UP               // Hijo subió de rango
+  BADGE_EARNED          // Hijo ganó una insignia
+  EVENT_REMINDER        // Recordatorio de evento en vivo
+  SUBSCRIPTION_EXPIRING // Suscripción por vencer
+  SYSTEM_ANNOUNCEMENT   // Anuncio del sistema
+}
+
+enum NotificationRecipient {
+  PARENT
+  CHILD
+  BOTH
+}
+
+model Notification {
+  id          String                @id @default(cuid())
+  userId      String                // Parent user ID
+  childId     String?               // Specific child (if applicable)
+  type        NotificationType
+  recipient   NotificationRecipient
+  titleEs     String
+  titleEn     String
+  messageEs   String                @db.Text
+  messageEn   String                @db.Text
+  actionUrl   String?               // Link to specific page
+  isRead      Boolean               @default(false)
+  emailSent   Boolean               @default(false)
+  createdAt   DateTime              @default(now())
+  readAt      DateTime?
+
+  // Relations
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  child Child? @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@index([childId])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+// ============================================
+// SUBSCRIPTIONS & PAYMENTS
+// ============================================
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  PAST_DUE
+  TRIALING
+}
+
+enum SubscriptionPlan {
+  FREE
+  PREMIUM
+}
+
+model Subscription {
+  id                    String             @id @default(cuid())
+  userId                String             @unique
+  stripeCustomerId      String             @unique
+  stripeSubscriptionId  String?            @unique
+  status                SubscriptionStatus @default(ACTIVE)
+  plan                  SubscriptionPlan   @default(FREE)
+  currentPeriodStart    DateTime?
+  currentPeriodEnd      DateTime?
+  cancelAtPeriodEnd     Boolean            @default(false)
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+
+  // Relations
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  paymentHistory  PaymentHistory[]
+
+  @@map("subscriptions")
+}
+
+enum PaymentStatus {
+  PAID
+  FAILED
+  PENDING
+}
+
+model PaymentHistory {
+  id               String        @id @default(cuid())
+  subscriptionId   String
+  stripeInvoiceId  String        @unique
+  amountCents      Int
+  currency         String        @default("USD")
+  status           PaymentStatus
+  paidAt           DateTime?
+  createdAt        DateTime      @default(now())
+
+  // Relations
+  subscription Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  @@index([subscriptionId])
+  @@map("payment_history")
+}
