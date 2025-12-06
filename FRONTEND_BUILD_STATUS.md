@@ -7,8 +7,9 @@
 
 ## 🔗 Live Deployment
 
-- **Production URL**: https://los-superheroes-del-corazon-ewionmwpl-hermetic-ormus-projects.vercel.app
+- **Production URL**: https://los-superheroes-del-corazon-3o3tffd5g-hermetic-ormus-projects.vercel.app
 - **GitHub Repository**: https://github.com/HermeticOrmus/los-superheroes-del-corazon
+- **Last Updated**: 2025-12-06 - Dev mode enabled with full mock authentication
 
 ---
 
