@@ -11,7 +11,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { user, logout } = useAuth();
+  const { user, profile, logout } = useAuth();
 
   const navigation = [
     { name: 'Panel General', href: '/dashboard', icon: Home },
@@ -40,9 +40,9 @@ export default function DashboardLayout({
               </span>
             </div>
             <div className="flex items-center space-x-4">
-              {user && (
+              {profile && (
                 <span className="text-gray-700">
-                  Hola, {user.name.split(' ')[0]}
+                  Hola, {profile.full_name?.split(' ')[0] || 'Superhéroe'}
                 </span>
               )}
               <button

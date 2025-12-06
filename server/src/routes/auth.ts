@@ -72,9 +72,8 @@ router.post('/register', async (req, res) => {
       user: {
         id: user.id,
         email: user.email,
-        fullName: user.profile?.fullName,
-        subscriptionStatus: user.subscription?.status,
-        subscriptionEndsAt: user.subscription?.currentPeriodEnd
+        name: user.profile?.fullName || '',
+        role: user.role
       }
     });
   } catch (error) {
@@ -137,11 +136,8 @@ router.post('/login', async (req, res) => {
       user: {
         id: user.id,
         email: user.email,
-        fullName: user.profile?.fullName,
-        preferredLanguage: user.profile?.preferredLanguage,
-        subscriptionStatus: user.subscription?.status,
-        subscriptionEndsAt: user.subscription?.currentPeriodEnd,
-        children: user.children
+        name: user.profile?.fullName || '',
+        role: user.role
       }
     });
   } catch (error) {
@@ -201,23 +197,95 @@ router.post('/child-login', async (req, res) => {
       return res.status(403).json({ error: 'Free trial expired. Please ask your parents to subscribe.' });
     }
 
+    // Generate JWT for child
+    const token = generateToken({
+      userId: child.id,
+      email: `${child.secretCode}@child.local`,
+      role: 'parent' // Using parent role for now, children have limited access
+    });
+
     res.json({
-      child: {
+      token,
+      user: {
         id: child.id,
-        secretCode: child.secretCode,
-        name: child.name,
-        superheroName: child.superheroName,
-        age: child.age,
-        avatarUrl: child.avatarUrl,
-        luzPoints: child.luzPoints,
-        rank: child.rank,
-        initiationCompleted: child.initiationCompleted,
-        archangel: child.archangel
+        email: child.secretCode,
+        name: child.superheroName || child.name,
+        role: 'CHILD'
       }
     });
   } catch (error) {
     console.error('Child login error:', error);
     res.status(500).json({ error: 'Login failed' });
+  }
+});
+
+/**
+ * GET /api/auth/me
+ * Get current authenticated user profile
+ */
+router.get('/me', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'No token provided' });
+    }
+
+    const token = authHeader.substring(7);
+
+    // Verify and decode token
+    const jwt = require('jsonwebtoken');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'superheroes-del-corazon-secret-key-change-in-production') as {
+      userId: string;
+      email: string;
+      role: string;
+    };
+
+    // Fetch user from database
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.userId },
+      include: {
+        profile: true,
+        subscription: true
+      }
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({
+      id: user.id,
+      email: user.email,
+      name: user.profile?.fullName || '',
+      role: user.role
+    });
+  } catch (error) {
+    console.error('Get profile error:', error);
+    res.status(401).json({ error: 'Invalid or expired token' });
+  }
+});
+
+/**
+ * GET /api/auth/verify-token
+ * Verify if current token is valid
+ */
+router.get('/verify-token', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.json({ valid: false });
+    }
+
+    const token = authHeader.substring(7);
+
+    const jwt = require('jsonwebtoken');
+    jwt.verify(token, process.env.JWT_SECRET || 'superheroes-del-corazon-secret-key-change-in-production');
+
+    res.json({ valid: true });
+  } catch (error) {
+    res.json({ valid: false });
   }
 });
 

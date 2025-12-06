@@ -1,9 +1,21 @@
 /**
  * API Service Layer
  * Handles all communication with the backend API
+ * Supports Dev Mode with mock data for testing
  */
 
+import {
+  MOCK_PARENT,
+  MOCK_CHILDREN,
+  MOCK_NOTIFICATIONS,
+  MOCK_ARCHANGELS,
+  MOCK_SAFETY_SETTINGS,
+  MOCK_AUTH_TOKEN,
+  mockDelay,
+} from './mock-data';
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+const DEV_MODE = process.env.NEXT_PUBLIC_DEV_MODE === 'true';
 
 interface ApiError {
   error: string;
@@ -92,9 +104,20 @@ export const authApi = {
     email: string;
     password: string;
   }): Promise<AuthResponse> {
+    if (DEV_MODE) {
+      await mockDelay();
+      return {
+        token: MOCK_AUTH_TOKEN,
+        user: MOCK_PARENT,
+      };
+    }
     return apiRequest<AuthResponse>('/auth/register', {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        fullName: data.name,
+        email: data.email,
+        password: data.password
+      }),
     });
   },
 
@@ -105,6 +128,13 @@ export const authApi = {
     email: string;
     password: string;
   }): Promise<AuthResponse> {
+    if (DEV_MODE) {
+      await mockDelay();
+      return {
+        token: MOCK_AUTH_TOKEN,
+        user: MOCK_PARENT,
+      };
+    }
     return apiRequest<AuthResponse>('/auth/login', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -117,7 +147,24 @@ export const authApi = {
   async loginChild(data: {
     secretCode: string;
   }): Promise<AuthResponse> {
-    return apiRequest<AuthResponse>('/auth/login-child', {
+    if (DEV_MODE) {
+      await mockDelay();
+      // Find child with matching secret code
+      const child = MOCK_CHILDREN.find(c => c.secretCode === data.secretCode);
+      if (!child) {
+        throw new Error('Código secreto inválido');
+      }
+      return {
+        token: MOCK_AUTH_TOKEN,
+        user: {
+          id: child.id,
+          email: '',
+          name: child.superheroName,
+          role: 'CHILD',
+        },
+      };
+    }
+    return apiRequest<AuthResponse>('/auth/child-login', {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -127,6 +174,10 @@ export const authApi = {
    * Get current user profile
    */
   async getProfile(): Promise<AuthResponse['user']> {
+    if (DEV_MODE) {
+      await mockDelay(200);
+      return MOCK_PARENT;
+    }
     return apiRequest<AuthResponse['user']>('/auth/me');
   },
 
@@ -134,6 +185,10 @@ export const authApi = {
    * Verify token validity
    */
   async verifyToken(): Promise<{ valid: boolean }> {
+    if (DEV_MODE) {
+      await mockDelay(100);
+      return { valid: true };
+    }
     return apiRequest<{ valid: boolean }>('/auth/verify-token');
   },
 
@@ -167,6 +222,10 @@ export const childrenApi = {
    * Get all children for logged-in parent
    */
   async getAll(): Promise<Child[]> {
+    if (DEV_MODE) {
+      await mockDelay(300);
+      return MOCK_CHILDREN;
+    }
     return apiRequest<Child[]>('/children');
   },
 
@@ -174,6 +233,14 @@ export const childrenApi = {
    * Get specific child by ID
    */
   async getById(id: string): Promise<Child> {
+    if (DEV_MODE) {
+      await mockDelay(300);
+      const child = MOCK_CHILDREN.find(c => c.id === id);
+      if (!child) {
+        throw new Error('Niño no encontrado');
+      }
+      return child;
+    }
     return apiRequest<Child>(`/children/${id}`);
   },
 
@@ -184,6 +251,26 @@ export const childrenApi = {
     name: string;
     age: number;
   }): Promise<Child> {
+    if (DEV_MODE) {
+      await mockDelay(500);
+      // In dev mode, just return a new mock child
+      return {
+        id: `child-mock-${Date.now()}`,
+        name: data.name,
+        superheroName: '',
+        age: data.age,
+        luzPoints: 0,
+        rank: 'INICIADO',
+        initiationCompleted: false,
+        requiresParentAssistance: data.age < 10,
+        secretCode: `CODE${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
+        archangel: {
+          nameEs: '',
+          colorHex: '#3b82f6',
+        },
+        createdAt: new Date().toISOString(),
+      };
+    }
     return apiRequest<Child>('/children', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -194,6 +281,14 @@ export const childrenApi = {
    * Update child details
    */
   async update(id: string, data: Partial<Child>): Promise<Child> {
+    if (DEV_MODE) {
+      await mockDelay(400);
+      const child = MOCK_CHILDREN.find(c => c.id === id);
+      if (!child) {
+        throw new Error('Niño no encontrado');
+      }
+      return { ...child, ...data };
+    }
     return apiRequest<Child>(`/children/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(data),
@@ -204,6 +299,10 @@ export const childrenApi = {
    * Delete a child
    */
   async delete(id: string): Promise<void> {
+    if (DEV_MODE) {
+      await mockDelay(300);
+      return;
+    }
     return apiRequest<void>(`/children/${id}`, {
       method: 'DELETE',
     });
@@ -218,6 +317,10 @@ export const notificationsApi = {
    * Get unread notifications
    */
   async getUnread(): Promise<Notification[]> {
+    if (DEV_MODE) {
+      await mockDelay(200);
+      return MOCK_NOTIFICATIONS.filter(n => !n.isRead);
+    }
     return apiRequest<Notification[]>('/notifications/unread');
   },
 
@@ -230,6 +333,15 @@ export const notificationsApi = {
     page: number;
     totalPages: number;
   }> {
+    if (DEV_MODE) {
+      await mockDelay(300);
+      return {
+        notifications: MOCK_NOTIFICATIONS,
+        total: MOCK_NOTIFICATIONS.length,
+        page: 1,
+        totalPages: 1,
+      };
+    }
     return apiRequest(`/notifications?page=${page}&limit=${limit}`);
   },
 
@@ -237,6 +349,11 @@ export const notificationsApi = {
    * Mark notification as read
    */
   async markAsRead(id: string): Promise<void> {
+    if (DEV_MODE) {
+      await mockDelay(150);
+      // In dev mode, just simulate success
+      return;
+    }
     return apiRequest<void>(`/notifications/${id}/read`, {
       method: 'PUT',
     });
@@ -246,6 +363,10 @@ export const notificationsApi = {
    * Mark all notifications as read
    */
   async markAllAsRead(): Promise<void> {
+    if (DEV_MODE) {
+      await mockDelay(200);
+      return;
+    }
     return apiRequest<void>('/notifications/read-all', {
       method: 'PUT',
     });
@@ -260,6 +381,10 @@ export const safetyApi = {
    * Get safety settings for a child
    */
   async getSettings(childId: string): Promise<any> {
+    if (DEV_MODE) {
+      await mockDelay(250);
+      return MOCK_SAFETY_SETTINGS;
+    }
     return apiRequest(`/safety/${childId}`);
   },
 
@@ -267,6 +392,10 @@ export const safetyApi = {
    * Update safety settings
    */
   async updateSettings(childId: string, settings: any): Promise<any> {
+    if (DEV_MODE) {
+      await mockDelay(400);
+      return { ...MOCK_SAFETY_SETTINGS, ...settings };
+    }
     return apiRequest(`/safety/${childId}`, {
       method: 'PUT',
       body: JSON.stringify(settings),
@@ -277,6 +406,10 @@ export const safetyApi = {
    * Reset to age-appropriate defaults
    */
   async resetToDefaults(childId: string): Promise<any> {
+    if (DEV_MODE) {
+      await mockDelay(300);
+      return MOCK_SAFETY_SETTINGS;
+    }
     return apiRequest(`/safety/${childId}/reset`, {
       method: 'POST',
     });
@@ -327,6 +460,10 @@ export const archangelsApi = {
    * Get all archangels
    */
   async getAll(): Promise<any[]> {
+    if (DEV_MODE) {
+      await mockDelay(250);
+      return MOCK_ARCHANGELS;
+    }
     return apiRequest('/archangels');
   },
 
@@ -334,6 +471,14 @@ export const archangelsApi = {
    * Get specific archangel by ID
    */
   async getById(id: string): Promise<any> {
+    if (DEV_MODE) {
+      await mockDelay(200);
+      const archangel = MOCK_ARCHANGELS.find(a => a.id === id);
+      if (!archangel) {
+        throw new Error('Arcángel no encontrado');
+      }
+      return archangel;
+    }
     return apiRequest(`/archangels/${id}`);
   },
 };
@@ -350,6 +495,20 @@ export const onboardingApi = {
     favoriteColor?: string;
     favoriteAnimal?: string;
   }): Promise<{ suggestions: string[] }> {
+    if (DEV_MODE) {
+      await mockDelay(600);
+      // Generate some creative suggestions based on the real name
+      const baseName = data.realName;
+      return {
+        suggestions: [
+          `${baseName} el Valiente`,
+          `Corazón de ${baseName}`,
+          `${baseName} de Luz`,
+          `Guardián ${baseName}`,
+          `${baseName} Luminoso`,
+        ],
+      };
+    }
     return apiRequest('/onboarding/generate-name', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -364,6 +523,28 @@ export const onboardingApi = {
     superheroName: string;
     archangelId: string;
   }): Promise<any> {
+    if (DEV_MODE) {
+      await mockDelay(800);
+      const child = MOCK_CHILDREN.find(c => c.secretCode === data.secretCode);
+      if (!child) {
+        throw new Error('Código secreto inválido');
+      }
+      const archangel = MOCK_ARCHANGELS.find(a => a.id === data.archangelId);
+      return {
+        success: true,
+        child: {
+          ...child,
+          superheroName: data.superheroName,
+          archangel: archangel ? {
+            nameEs: archangel.nameEs,
+            colorHex: archangel.colorHex,
+          } : child.archangel,
+          initiationCompleted: true,
+          luzPoints: child.luzPoints + 100, // Award initiation points
+        },
+        message: '¡Ceremonia completada con éxito!',
+      };
+    }
     return apiRequest('/onboarding/complete', {
       method: 'POST',
       body: JSON.stringify(data),

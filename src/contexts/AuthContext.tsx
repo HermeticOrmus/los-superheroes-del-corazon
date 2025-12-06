@@ -2,22 +2,25 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { authApi } from '@/lib/api';
+import { createClient } from '@/lib/supabase/client';
+import type { User, Session } from '@supabase/supabase-js';
 
-interface User {
+interface Profile {
   id: string;
-  email: string;
-  name: string;
+  full_name: string;
   role: string;
+  avatar_url?: string;
 }
 
 interface AuthContextType {
   user: User | null;
+  profile: Profile | null;
+  session: Session | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   loginChild: (secretCode: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   isAuthenticated: boolean;
 }
 
@@ -25,85 +28,127 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
+  const supabase = createClient();
 
-  // Check authentication status on mount
   useEffect(() => {
-    checkAuth();
+    // Get initial session
+    const getSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setSession(session);
+      setUser(session?.user ?? null);
+
+      if (session?.user) {
+        await fetchProfile(session.user.id);
+      }
+
+      setLoading(false);
+    };
+
+    getSession();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        setSession(session);
+        setUser(session?.user ?? null);
+
+        if (session?.user) {
+          await fetchProfile(session.user.id);
+        } else {
+          setProfile(null);
+        }
+
+        setLoading(false);
+      }
+    );
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  // Redirect logic based on auth state
-  useEffect(() => {
-    if (!loading) {
-      const publicRoutes = ['/login', '/register', '/forgot-password', '/'];
-      const isPublicRoute = publicRoutes.some(route => pathname === route);
+  const fetchProfile = async (userId: string) => {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single();
 
-      if (!user && !isPublicRoute) {
-        // Not authenticated and trying to access protected route
-        router.push('/login');
-      } else if (user && (pathname === '/login' || pathname === '/register')) {
-        // Already authenticated and on login/register page
-        if (user.role === 'CHILD') {
-          router.push('/child-dashboard');
-        } else {
-          router.push('/dashboard');
-        }
-      }
-    }
-  }, [user, loading, pathname]);
-
-  const checkAuth = async () => {
-    const token = authApi.getToken();
-
-    if (!token) {
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const userData = await authApi.getProfile();
-      setUser(userData);
-    } catch (error) {
-      // Token is invalid
-      authApi.removeToken();
-      setUser(null);
-    } finally {
-      setLoading(false);
+    if (!error && data) {
+      setProfile(data);
     }
   };
 
   const login = async (email: string, password: string) => {
-    const response = await authApi.login({ email, password });
-    authApi.storeToken(response.token);
-    setUser(response.user);
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-    // Redirect based on role
-    if (response.user.role === 'CHILD') {
-      router.push('/child-dashboard');
-    } else {
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    if (data.user) {
+      await fetchProfile(data.user.id);
       router.push('/dashboard');
     }
   };
 
   const loginChild = async (secretCode: string) => {
-    const response = await authApi.loginChild({ secretCode });
-    authApi.storeToken(response.token);
-    setUser(response.user);
+    // Look up child by secret code
+    const { data: child, error: childError } = await supabase
+      .from('children')
+      .select('*, archangel:archangels(*)')
+      .eq('secret_code', secretCode.toUpperCase())
+      .single();
+
+    if (childError || !child) {
+      throw new Error('Código secreto inválido');
+    }
+
+    // For now, store child info in localStorage and redirect
+    // In production, you might create a special child session
+    localStorage.setItem('child_session', JSON.stringify(child));
     router.push('/child-dashboard');
   };
 
   const register = async (name: string, email: string, password: string) => {
-    const response = await authApi.register({ name, email, password });
-    authApi.storeToken(response.token);
-    setUser(response.user);
-    router.push('/dashboard');
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: name,
+        },
+      },
+    });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    if (data.user) {
+      // Profile is auto-created by trigger, but we can update it
+      await supabase
+        .from('profiles')
+        .update({ full_name: name })
+        .eq('id', data.user.id);
+
+      await fetchProfile(data.user.id);
+      router.push('/dashboard');
+    }
   };
 
-  const logout = () => {
-    authApi.removeToken();
+  const logout = async () => {
+    await supabase.auth.signOut();
+    localStorage.removeItem('child_session');
     setUser(null);
+    setProfile(null);
+    setSession(null);
     router.push('/login');
   };
 
@@ -111,6 +156,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     <AuthContext.Provider
       value={{
         user,
+        profile,
+        session,
         loading,
         login,
         loginChild,

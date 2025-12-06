@@ -3,11 +3,37 @@
 **Last Updated:** 2025-12-06
 **Build Status:** ⚡ 85% Complete - Production Ready Core Features
 **Deployment Status:** ✅ LIVE on Vercel
+**Dev Mode:** ✅ ENABLED - Full mock authentication and data
 
 ## 🔗 Live Deployment
 
 - **Production URL**: https://los-superheroes-del-corazon-ewionmwpl-hermetic-ormus-projects.vercel.app
 - **GitHub Repository**: https://github.com/HermeticOrmus/los-superheroes-del-corazon
+
+---
+
+## 🛠️ DEV MODE - Testing Without Backend
+
+**Status:** ✅ Fully Implemented
+
+Dev Mode allows complete testing of the user experience without backend connectivity:
+
+- **Mock Authentication** - Login as parent or child with test credentials
+- **Mock Data** - 3 pre-configured children, 4 notifications, 7 archangels
+- **Realistic Delays** - Simulated API latency (200-800ms)
+- **All Flows Testable** - Parent dashboard, child login, onboarding, safety settings
+
+**Quick Start:**
+```bash
+# Dev mode is enabled in .env.local
+NEXT_PUBLIC_DEV_MODE=true
+
+# Test Credentials:
+Parent: amoryvida@gmail.com / any password
+Child Secret Codes: AMAR333, DIEGO456, BELLA789
+
+# Full guide: DEV_MODE.md
+```
 
 ---
 
