@@ -18,7 +18,7 @@ import { notificationsApi } from '@/lib/api';
 
 interface Notification {
   id: string;
-  type: 'MISSION_RELEASED' | 'CHALLENGE_COMPLETED' | 'RANK_UP' | 'BADGE_EARNED' | 'EVENT_REMINDER' | 'SUBSCRIPTION_EXPIRING' | 'SYSTEM_ANNOUNCEMENT';
+  type: string;
   titleEs: string;
   messageEs: string;
   isRead: boolean;
@@ -48,8 +48,8 @@ export default function NotificationsPage() {
     }
   };
 
-  const getNotificationIcon = (type: Notification['type']) => {
-    const icons = {
+  const getNotificationIcon = (type: string) => {
+    const icons: Record<string, any> = {
       MISSION_RELEASED: Target,
       CHALLENGE_COMPLETED: Trophy,
       RANK_UP: Star,
@@ -61,8 +61,8 @@ export default function NotificationsPage() {
     return icons[type] || Bell;
   };
 
-  const getNotificationColor = (type: Notification['type']) => {
-    const colors = {
+  const getNotificationColor = (type: string) => {
+    const colors: Record<string, string> = {
       MISSION_RELEASED: 'bg-blue-100 text-blue-600',
       CHALLENGE_COMPLETED: 'bg-green-100 text-green-600',
       RANK_UP: 'bg-gold-100 text-gold-600',
@@ -71,7 +71,7 @@ export default function NotificationsPage() {
       SUBSCRIPTION_EXPIRING: 'bg-red-100 text-red-600',
       SYSTEM_ANNOUNCEMENT: 'bg-gray-100 text-gray-600'
     };
-    return colors[type] || colors.SYSTEM_ANNOUNCEMENT;
+    return colors[type] || 'bg-gray-100 text-gray-600';
   };
 
   const formatTimeAgo = (dateString: string) => {
