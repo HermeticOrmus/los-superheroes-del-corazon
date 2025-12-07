@@ -29,21 +29,22 @@
 
 ## 🌈 Color Palette
 
-### Primary Colors
+### Primary Colors (Heart-Centered)
 
 | Color | Hex | Usage | Meaning |
 |-------|-----|-------|---------|
-| **Turquoise** | `#00D4B8` | Primary brand color, crown, CTA buttons | Heart, compassion, clarity |
-| **Sunshine Yellow** | `#FFD93D` | Warmth, light, backgrounds | Joy, illumination, "Sol" |
-| **Vibrant Orange** | `#FF8C42` | Energy, accents, highlights | Vitality, creativity, fire |
-| **Soft Pink** | `#FFB3D9` | Softness, love, gradients | Tenderness, care, heart |
+| **Green** | `#22c55e` | PRIMARY - Heart, corazón, nature, growth | Life, compassion, heart chakra |
+| **Gold** | `#f59e0b` | SECONDARY - Puntos Luz, energy, rewards | Illumination, achievement, value |
+| **Red** | `#ef4444` | ACCENT - Vibrancy, passion, fire | Love, courage, vitality |
 
-### Accent Colors
+### Supporting Colors
 
 | Color | Hex | Usage | Meaning |
 |-------|-----|-------|---------|
 | **Purple** | `#B366FF` | Spirituality, special elements | Transformation, mysticism |
-| **Cream** | `#FFF4CC` | Background warmth, soft surfaces | Gentle, welcoming, safe |
+| **Pink** | `#FFB3D9` | Softness, love, gradients | Tenderness, care |
+| **Orange** | `#FF8C42` | Energy highlights | Creativity, enthusiasm |
+| **Cream** | `#FFF4CC` | Background warmth | Gentle, welcoming |
 
 ### Text Colors
 
@@ -98,28 +99,28 @@
 
 ## 🔄 Before/After Comparison
 
-### Current Superhéroes Platform
-| Element | Current | New (La Gran Obra Aligned) |
+### Superhéroes Platform - Color Evolution
+| Element | Original | Updated (Heart-Centered) |
 |---------|---------|---------------------------|
-| Primary Color | Red `#ef4444` | Turquoise `#00D4B8` |
-| Accent Color | Blue `#3b82f6` | Purple `#B366FF` |
-| Energy Color | Gold `#f59e0b` | Orange `#FF8C42` |
-| Background | Cream `#fef3c7` | Sunshine Yellow `#FFD93D` or Cream `#FFF4CC` |
-| Typography | Inter (sans-serif) | Caveat/handwritten |
+| Primary Color | Red `#ef4444` | Green `#22c55e` (HEART) |
+| Secondary Color | Blue `#3b82f6` | Gold `#f59e0b` (ENERGY) |
+| Accent Color | Various | Red `#ef4444` (VIBRANCY) |
+| Support Colors | Limited | Purple, Pink, Orange, Cream |
+| Typography | Inter (sans-serif) | Caveat (handwritten headings) + Inter (body) |
 | Shapes | Cards with rounded corners | Organic blobs, flowing shapes |
-| Icons | Lucide (geometric) | Custom hand-drawn style |
-| Gradients | Linear (geometric) | Organic, multi-color flows |
+| Icons | Lucide (geometric) | Lucide + hand-drawn accents |
+| Gradients | Linear (geometric) | Organic flows (green→gold→red) |
 
 ---
 
 ## 🎯 Implementation Priorities
 
 ### Phase 1: Color & Typography (Immediate)
-1. ✅ Update `globals.css` with new color variables
-2. ✅ Import handwritten Google Font
-3. ✅ Replace all `primary-*` colors with turquoise
-4. ✅ Replace all `blue-*` with purple where appropriate
-5. ✅ Update gradients to use new palette
+1. ✅ Update `globals.css` with new color variables (green primary)
+2. ✅ Import Caveat handwritten Google Font
+3. ✅ Replace all `primary-*` colors with green (heart)
+4. ✅ Use gold for energy/rewards, red for vibrancy
+5. ✅ Update gradients to green→gold→red flows
 
 ### Phase 2: Logo Integration (Immediate)
 1. ✅ Add La Gran Obra logo to landing page footer
@@ -174,23 +175,23 @@
 
 ## 🎨 Gradient Combinations
 
-### Recommended Gradients (La Gran Obra Style)
+### Recommended Gradients (Heart-Centered Style)
 
 ```css
-/* Sunrise Gradient */
-background: linear-gradient(135deg, #FFD93D 0%, #FF8C42 50%, #FFB3D9 100%);
+/* Heart Fire Gradient (Primary Brand) */
+background: linear-gradient(135deg, #22c55e 0%, #f59e0b 50%, #ef4444 100%);
 
-/* Heart Magic Gradient */
-background: linear-gradient(135deg, #FFB3D9 0%, #B366FF 100%);
+/* Nature Growth Gradient */
+background: linear-gradient(135deg, #dcfce7 0%, #22c55e 100%);
 
-/* Ocean Heart Gradient */
-background: linear-gradient(135deg, #00D4B8 0%, #B366FF 100%);
+/* Golden Heart Gradient */
+background: linear-gradient(135deg, #22c55e 0%, #f59e0b 100%);
 
-/* Sun Glow Gradient */
-background: linear-gradient(135deg, #FFF4CC 0%, #FFD93D 100%);
+/* Passionate Heart Gradient */
+background: linear-gradient(135deg, #ef4444 0%, #f59e0b 100%);
 
-/* Full Spectrum (Banner Style) */
-background: linear-gradient(135deg, #FF8C42 0%, #FFB3D9 25%, #FFD93D 50%, #00D4B8 75%, #B366FF 100%);
+/* Full Spectrum (with purple/pink accents) */
+background: linear-gradient(135deg, #22c55e 0%, #f59e0b 33%, #ef4444 66%, #B366FF 100%);
 ```
 
 ---
@@ -199,15 +200,16 @@ background: linear-gradient(135deg, #FF8C42 0%, #FFB3D9 25%, #FFD93D 50%, #00D4B
 
 Before considering rebrand complete, verify:
 
-- [ ] All red (`#ef4444`) replaced with turquoise (`#00D4B8`)
-- [ ] All sharp blues replaced with purple (`#B366FF`)
-- [ ] Handwritten font applied to headings
-- [ ] La Gran Obra logo visible on landing page
-- [ ] "Un proyecto de" attribution present
-- [ ] Gradients updated to organic color flows
-- [ ] Button corners softened (more pill-like)
+- [x] Primary color set to green (`#22c55e`) - heart theme
+- [x] Gold (`#f59e0b`) for energy, rewards, points
+- [x] Red (`#ef4444`) for vibrancy and passion
+- [x] Caveat handwritten font applied to headings
+- [x] La Gran Obra logo visible on landing page
+- [x] "Un proyecto de" attribution present
+- [x] Gradients updated to green→gold→red flows
+- [ ] All dashboard pages updated with new palette
+- [ ] Child dashboard updated with heart-centered colors
 - [ ] Warm, welcoming tone in all copy
-- [ ] No corporate/cold language remaining
 - [ ] Mobile responsive with new branding
 
 ---

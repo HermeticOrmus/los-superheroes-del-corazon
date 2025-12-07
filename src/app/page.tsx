@@ -18,19 +18,19 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       {/* Hero Section - Bright gradient with animation */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary-50 via-sunshine-50 to-rosa-50 px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary-50 via-gold-50 to-red-50 px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
         {/* Animated background circles */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-primary-200 opacity-20 blur-3xl animate-pulse" />
-          <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-sunshine-200 opacity-20 blur-3xl animate-pulse delay-1000" />
-          <div className="absolute top-1/2 left-1/2 h-80 w-80 rounded-full bg-naranja-200 opacity-20 blur-3xl animate-pulse delay-2000" />
+          <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-gold-200 opacity-20 blur-3xl animate-pulse delay-1000" />
+          <div className="absolute top-1/2 left-1/2 h-80 w-80 rounded-full bg-red-200 opacity-20 blur-3xl animate-pulse delay-2000" />
         </div>
 
         <div className="relative mx-auto max-w-7xl">
           <div className="text-center space-y-8">
             {/* Badge */}
             <div className="flex justify-center">
-              <Badge variant="secondary" className="gap-1.5 px-4 py-2 text-base font-semibold bg-sunshine-500 text-gray-900 hover:bg-sunshine-600">
+              <Badge variant="secondary" className="gap-1.5 px-4 py-2 text-base font-semibold bg-gold-500 text-white hover:bg-gold-600">
                 <Sparkles className="h-4 w-4" />
                 Club Internacional de Niños
               </Badge>
@@ -41,7 +41,7 @@ export default function Home() {
               <span className="block text-primary-600 drop-shadow-sm">
                 Club de los
               </span>
-              <span className="block mt-2 bg-gradient-to-r from-sunshine-500 via-naranja-500 to-primary-600 bg-clip-text text-transparent">
+              <span className="block mt-2 bg-gradient-to-r from-primary-600 via-gold-500 to-red-500 bg-clip-text text-transparent">
                 Superhéroes del Corazón
               </span>
             </h1>
@@ -53,7 +53,7 @@ export default function Home() {
                 <span className="relative z-10 font-bold text-primary-600">
                   mayor superpoder
                 </span>
-                <span className="absolute bottom-1 left-0 h-3 w-full bg-sunshine-200 -z-0" />
+                <span className="absolute bottom-1 left-0 h-3 w-full bg-gold-200 -z-0" />
               </span>{" "}
               está dentro de su propio corazón
             </p>
@@ -85,11 +85,11 @@ export default function Home() {
             {/* Social Proof */}
             <div className="flex items-center justify-center gap-8 pt-8 text-sm text-gray-600">
               <div className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-primary-500" />
+                <Users className="h-5 w-5 text-primary-600" />
                 <span className="font-semibold">+500 Superhéroes</span>
               </div>
               <div className="flex items-center gap-2">
-                <Globe className="h-5 w-5 text-purpura-500" />
+                <Globe className="h-5 w-5 text-red-500" />
                 <span className="font-semibold">12 Países</span>
               </div>
             </div>
@@ -124,28 +124,28 @@ export default function Home() {
             </Card>
 
             {/* Feature 2 */}
-            <Card className="group p-8 border-2 hover:border-naranja-300 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 bg-gradient-to-br from-white to-naranja-50">
-              <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-naranja-500 shadow-lg group-hover:scale-110 transition-transform">
+            <Card className="group p-8 border-2 hover:border-gold-300 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 bg-gradient-to-br from-white to-gold-50">
+              <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gold-500 shadow-lg group-hover:scale-110 transition-transform">
                 <Shield className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-3">
                 Retos Familiares
               </h3>
               <p className="text-gray-600 leading-relaxed">
-                4 retos semanales diseñados para hacer en familia. Sube fotos, videos o audios de tus <span className="font-semibold text-naranja-600">hazañas completadas</span>.
+                4 retos semanales diseñados para hacer en familia. Sube fotos, videos o audios de tus <span className="font-semibold text-gold-600">hazañas completadas</span>.
               </p>
             </Card>
 
             {/* Feature 3 */}
-            <Card className="group p-8 border-2 hover:border-purpura-300 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 bg-gradient-to-br from-white to-purpura-50">
-              <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-purpura-500 shadow-lg group-hover:scale-110 transition-transform">
+            <Card className="group p-8 border-2 hover:border-red-300 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 bg-gradient-to-br from-white to-red-50">
+              <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-red-500 shadow-lg group-hover:scale-110 transition-transform">
                 <Trophy className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-3">
                 Puntos Luz y Premios
               </h3>
               <p className="text-gray-600 leading-relaxed">
-                Gana <span className="font-semibold text-sunshine-600">puntos Luz</span> por cada reto. Canjéalos por cartas especiales, pulseras, diplomas y más sorpresas.
+                Gana <span className="font-semibold text-gold-600">puntos Luz</span> por cada reto. Canjéalos por cartas especiales, pulseras, diplomas y más sorpresas.
               </p>
             </Card>
           </div>
@@ -153,7 +153,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="px-4 py-16 sm:px-6 lg:px-8 lg:py-24 bg-gradient-to-r from-primary-600 via-naranja-500 to-rosa-500">
+      <section className="px-4 py-16 sm:px-6 lg:px-8 lg:py-24 bg-gradient-to-r from-primary-600 via-gold-500 to-red-500">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-6">
             ¿Listo para descubrir tu superpoder?

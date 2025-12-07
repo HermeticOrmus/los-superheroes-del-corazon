@@ -12,29 +12,29 @@
     --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
-    /* Primary: Turquoise (Heart, La Gran Obra) */
-    --primary: 174 100% 42%;
+    /* Primary: Green (Heart, Corazón, Nature) */
+    --primary: 142 76% 45%;
     --primary-foreground: 0 0% 100%;
-    /* Secondary: Sunshine Yellow (Joy, Light, Sol) */
-    --secondary: 48 100% 61%;
-    --secondary-foreground: 26 83% 14%;
+    /* Secondary: Gold (Energy, Light, Puntos Luz) */
+    --secondary: 45 93% 47%;
+    --secondary-foreground: 0 0% 100%;
     --muted: 210 40% 96%;
     --muted-foreground: 215 16% 47%;
-    /* Accent: Purple (Spirituality, Transformation) */
-    --accent: 262 100% 70%;
+    /* Accent: Red (Vibrancy, Passion, Fire) */
+    --accent: 0 84% 60%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     --border: 214 32% 91%;
     --input: 214 32% 91%;
-    --ring: 174 100% 42%;
+    --ring: 142 76% 45%;
     --radius: 1rem;
-    /* Chart colors: La Gran Obra palette */
-    --chart-1: 174 100% 42%;   /* Turquoise */
-    --chart-2: 48 100% 61%;    /* Sunshine Yellow */
-    --chart-3: 22 100% 63%;    /* Vibrant Orange */
-    --chart-4: 330 100% 82%;   /* Soft Pink */
-    --chart-5: 262 100% 70%;   /* Purple */
+    /* Chart colors: Heart-centered palette */
+    --chart-1: 142 76% 45%;   /* Green */
+    --chart-2: 45 93% 47%;    /* Gold */
+    --chart-3: 0 84% 60%;     /* Red */
+    --chart-4: 262 100% 70%;  /* Purple */
+    --chart-5: 330 100% 82%;  /* Pink */
   }
 
   .dark {
