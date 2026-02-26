@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Los Superheroes del Corazon - Character Showcase</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #0a0a1a;
+      color: #e0e0e0;
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      padding: 3rem 1rem 2rem;
+      background: linear-gradient(180deg, #1a1040 0%, #0a0a1a 100%);
+    }
+
+    header h1 {
+      font-size: 2.4rem;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #f0c040, #ff6080, #a060ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    header p {
+      margin-top: 0.75rem;
+      font-size: 1rem;
+      color: #888;
+      letter-spacing: 0.05em;
+    }
+
+    .subtitle {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    .subtitle span {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .subtitle .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #444;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #12122a;
+      border: 1px solid #222244;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+    }
+
+    .card-header {
+      padding: 1.25rem 1.5rem 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .color-badge {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+      flex-shrink: 0;
+    }
+
+    .card-header h2 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .card-header .game-tag {
+      margin-left: auto;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.06);
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .sprites {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1.25rem 1rem;
+      background: #0e0e20;
+    }
+
+    .sprite-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .sprite-col img {
+      width: 64px;
+      height: 64px;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .sprite-col span {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #555;
+    }
+
+    .card-body {
+      padding: 1rem 1.5rem 1.25rem;
+    }
+
+    .meta-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      font-size: 0.75rem;
+      color: #888;
+    }
+
+    .meta-item strong {
+      color: #aaa;
+    }
+
+    .description {
+      margin-top: 0.6rem;
+      font-size: 0.8rem;
+      color: #666;
+      line-height: 1.5;
+      font-style: italic;
+    }
+
+    .signature {
+      margin-top: 0.6rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      color: var(--accent);
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #444;
+      font-size: 0.75rem;
+    }
+
+    footer .stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1rem;
+      font-size: 0.8rem;
+      color: #555;
+    }
+
+    @media (max-width: 700px) {
+      .grid { grid-template-columns: 1fr; padding: 1rem; }
+      header h1 { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Los Superheroes del Corazon</h1>
+  <p>9 Archangel Characters &mdash; Pixel Art Sprite Reference</p>
+  <div class="subtitle">
+    <span><span class="dot"></span> 64px chibi</span>
+    <span><span class="dot"></span> 4 directions</span>
+    <span><span class="dot"></span> basic shading</span>
+    <span><span class="dot"></span> black outline</span>
+  </div>
+</header>
+
+<div class="grid">
+
+  <!-- Miguel -->
+  <div class="card" style="--accent: #4488ff;">
+    <div class="card-header">
+      <div class="color-badge"></div>
+      <h2>Miguel</h2>
+      <span class="game-tag">Shield Defense</span>
+    </div>
+    <div class="sprites">
+      <div class="sprite-col"><img src="characters/miguel/south.png" alt="Miguel south"><span>south</span></div>
+      <div class="sprite-col"><img src="characters/miguel/east.png" alt="Miguel east"><span>east</span></div>
+      <div class="sprite-col"><img src="characters/miguel/north.png" alt="Miguel north"><span>north</span></div>
+      <div class="sprite-col"><img src="characters/miguel/west.png" alt="Miguel west"><span>west</span></div>
+    </div>
+    <div class="card-body">
+      <div class="meta-row">
+        <span class="meta-item"><strong>Color:</strong> Blue</span>
+        <span class="meta-item"><strong>Gender:</strong> Boy</span>
+        <span class="meta-item"><strong>Element:</strong> Protection</span>
+      </div>
+      <p class="description">Brave magical child with a glowing golden shield. Confident and heroic.</p>
+      <div class="signature">Golden Shield</div>
+    </div>
+  </div>
+
+  <!-- Gabriel -->
+  <div class="card" style="--accent: #f0d080;">
+    <div class="card-header">
+      <div class="color-badge"></div>
+      <h2>Gabriel</h2>
+      <span class="game-tag">Word Puzzle</span>
+    </div>
+    <div class="sprites">
+      <div class="sprite-col"><img src="characters/gabriel/south.png" alt="Gabriel south"><span>south</span></div>
+      <div class="sprite-col"><img src="characters/gabriel/east.png" alt="Gabriel east"><span>east</span></div>
+      <div class="sprite-col"><img src="characters/gabriel/north.png" alt="Gabriel north"><span>north</span></div>
+      <div class="sprite-col"><img src="characters/gabriel/west.png" alt="Gabriel west"><span>west</span></div>
+    </div>
+    <div class="card-body">
+      <div class="meta-row">
+        <span class="meta-item"><strong>Color:</strong> White / Gold</span>
+        <span class="meta-item"><strong>Gender:</strong> Girl</span>
+        <span class="meta-item"><strong>Element:</strong> Communication</span>
+      </div>
+      <p class="description">Wise mystical messenger with a shimmering golden trumpet. Gentle and knowing.</p>
+      <div class="signature">Golden Trumpet</div>
+    </div>
+  </div>
+
+  <!-- Rafael -->
+  <div class="card" style="--accent: #44cc66;">
+    <div class="card-header">
+      <div class="color-badge"></div>
+      <h2>Rafael</h2>
+      <span class="game-tag">Mahjong</span>
+    </div>
+    <div class="sprites">
+      <div class="sprite-col"><img src="characters/rafael/south.png" alt="Rafael south"><span>south</span></div>
+      <div class="sprite-col"><img src="characters/rafael/east.png" alt="Rafael east"><span>east</span></div>
+      <div class="sprite-col"><img src="characters/rafael/north.png" alt="Rafael north"><span>north</span></div>
+      <div class="sprite-col"><img src="characters/rafael/west.png" alt="Rafael west"><span>west</span></div>
+    </div>
+    <div class="card-body">
+      <div class="meta-row">
+        <span class="meta-item"><strong>Color:</strong> Green</span>
+        <span class="meta-item"><strong>Gender:</strong> Boy</span>
+        <span class="meta-item"><strong>Element:</strong> Healing</span>
+      </div>
+      <p class="description">Kind nature healer child with a wooden staff topped by a glowing green crystal.</p>
+      <div class="signature">Healing Staff</div>
+    </div>
+  </div>
+
+  <!-- Uriel -->
+  <div class="card" style="--accent: #ff6633;">
+    <div class="card-header">
+      <div class="color-badge"></div>
+      <h2>Uriel</h2>
+      <span class="game-tag">2048 Merge</span>
+    </div>
+    <div class="sprites">
+      <div class="sprite-col"><img src="characters/uriel/south.png" alt="Uriel south"><span>south</span></div>
+      <div class="sprite-col"><img src="characters/uriel/east.png" alt="Uriel east"><span>east</span></div>
+      <div class="sprite-col"><img src="characters/uriel/north.png" alt="Uriel north"><span>north</span></div>
+      <div class="sprite-col"><img src="characters/uriel/west.png" alt="Uriel west"><span>west</span></div>
+    </div>
+    <div class="card-body">
+      <div class="meta-row">
+        <span class="meta-item"><strong>Color:</strong> Red / Amber</span>
+        <span class="meta-item"><strong>Gender:</strong> Boy</span>
+        <span class="meta-item"><strong>Element:</strong> Transmutation</span>
+      </div>
+      <p class="description">Determined fire keeper child with a glowing amber lantern of magical fire.</p>
+      <div class="signature">Fire Lantern</div>
+    </div>
+  </div>
+
+  <!-- Jofiel -->
+  <div class="card" style="--accent: #bb66ff;">
+    <div class="card-header">
+      <div class="color-badge"></div>
+      <h2>Jofiel</h2>
+      <span class="game-tag">Drawing / Pattern</span>
+    </div>
+    <div class="sprites">
+      <div class="sprite-col"><img src="characters/jofiel/south.png" alt="Jofiel south"><span>south</span></div>
+      <div class="sprite-col"><img src="characters/jofiel/east.png" alt="Jofiel east"><span>east</span></div>
+      <div class="sprite-col"><img src="characters/jofiel/north.png" alt="Jofiel north"><span>north</span></div>
+      <div class="sprite-col"><img src="characters/jofiel/west.png" alt="Jofiel west"><span>west</span></div>
+    </div>
+    <div class="card-body">
+      <div class="meta-row">
+        <span class="meta-item"><strong>Color:</strong> Purple / Violet</span>
+        <span class="meta-item"><strong>Gender:</strong> Girl</span>
+        <span class="meta-item"><strong>Element:</strong> Creativity</span>
+      </div>
+      <p class="description">Creative magical artist child with a glowing paintbrush trailing sparkles.</p>
+      <div class="signature">Magic Paintbrush</div>
+    </div>
+  </div>
+
+  <!-- Chamuel -->
+  <div class="card" style="--accent: #ff77aa;">
+    <div class="card-header">
+      <div class="color-badge"></div>
+      <h2>Chamuel</h2>
+      <span class="game-tag">Flow Connect</span>
+    </div>
+    <div class="sprites">
+      <div class="sprite-col"><img src="characters/chamuel/south.png" alt="Chamuel south"><span>south</span></div>
+      <div class="sprite-col"><img src="characters/chamuel/east.png" alt="Chamuel east"><span>east</span></div>
+      <div class="sprite-col"><img src="characters/chamuel/north.png" alt="Chamuel north"><span>north</span></div>
+      <div class="sprite-col"><img src="characters/chamuel/west.png" alt="Chamuel west"><span>west</span></div>
+    </div>
+    <div class="card-body">
+      <div class="meta-row">
+        <span class="meta-item"><strong>Color:</strong> Pink / Rose</span>
+        <span class="meta-item"><strong>Gender:</strong> Boy</span>
+        <span class="meta-item"><strong>Element:</strong> Compassion</span>
+      </div>
+      <p class="description">Compassionate magical child with hands radiating warm pink heart light.</p>
+      <div class="signature">Glowing Heart Hands</div>
+    </div>
+  </div>
+
+  <!-- Zadquiel -->
+  <div class="card" style="--accent: #aa88dd;">
+    <div class="card-header">
+      <div class="color-badge"></div>
+      <h2>Zadquiel</h2>
+      <span class="game-tag">Bubble Shooter</span>
+    </div>
+    <div class="sprites">
+      <div class="sprite-col"><img src="characters/zadquiel/south.png" alt="Zadquiel south"><span>south</span></div>
+      <div class="sprite-col"><img src="characters/zadquiel/east.png" alt="Zadquiel east"><span>east</span></div>
+      <div class="sprite-col"><img src="characters/zadquiel/north.png" alt="Zadquiel north"><span>north</span></div>
+      <div class="sprite-col"><img src="characters/zadquiel/west.png" alt="Zadquiel west"><span>west</span></div>
+    </div>
+    <div class="card-body">
+      <div class="meta-row">
+        <span class="meta-item"><strong>Color:</strong> Lilac / Lavender</span>
+        <span class="meta-item"><strong>Gender:</strong> Girl</span>
+        <span class="meta-item"><strong>Element:</strong> Freedom</span>
+      </div>
+      <p class="description">Mystical freedom child in lilac robes with butterfly patterns, surrounded by glowing butterflies.</p>
+      <div class="signature">Butterfly Companions</div>
+    </div>
+  </div>
+
+  <!-- Metatron -->
+  <div class="card" style="--accent: #8844cc;">
+    <div class="card-header">
+      <div class="color-badge"></div>
+      <h2>Metatron</h2>
+      <span class="game-tag">Block Placement</span>
+    </div>
+    <div class="sprites">
+      <div class="sprite-col"><img src="characters/metatron/south.png" alt="Metatron south"><span>south</span></div>
+      <div class="sprite-col"><img src="characters/metatron/east.png" alt="Metatron east"><span>east</span></div>
+      <div class="sprite-col"><img src="characters/metatron/north.png" alt="Metatron north"><span>north</span></div>
+      <div class="sprite-col"><img src="characters/metatron/west.png" alt="Metatron west"><span>west</span></div>
+    </div>
+    <div class="card-body">
+      <div class="meta-row">
+        <span class="meta-item"><strong>Color:</strong> Deep Purple / Gold</span>
+        <span class="meta-item"><strong>Gender:</strong> Boy</span>
+        <span class="meta-item"><strong>Element:</strong> Sacred Geometry</span>
+      </div>
+      <p class="description">Wise sacred geometry child with a golden circlet, holding a glowing geometric cube of light.</p>
+      <div class="signature">Metatron's Cube</div>
+    </div>
+  </div>
+
+  <!-- Gazardiel -->
+  <div class="card" style="--accent: #ff9933;">
+    <div class="card-header">
+      <div class="color-badge"></div>
+      <h2>Gazardiel</h2>
+      <span class="game-tag">Idle Garden</span>
+    </div>
+    <div class="sprites">
+      <div class="sprite-col"><img src="characters/gazardiel/south.png" alt="Gazardiel south"><span>south</span></div>
+      <div class="sprite-col"><img src="characters/gazardiel/east.png" alt="Gazardiel east"><span>east</span></div>
+      <div class="sprite-col"><img src="characters/gazardiel/north.png" alt="Gazardiel north"><span>north</span></div>
+      <div class="sprite-col"><img src="characters/gazardiel/west.png" alt="Gazardiel west"><span>west</span></div>
+    </div>
+    <div class="card-body">
+      <div class="meta-row">
+        <span class="meta-item"><strong>Color:</strong> Orange / Dawn</span>
+        <span class="meta-item"><strong>Gender:</strong> Girl</span>
+        <span class="meta-item"><strong>Element:</strong> Growth</span>
+      </div>
+      <p class="description">Hopeful nature guardian child with leaves in her hair, holding a glowing golden seed.</p>
+      <div class="signature">Golden Seed</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="stats">
+    <span>9 characters</span>
+    <span>36 sprites</span>
+    <span>64px canvas</span>
+    <span>chibi proportions</span>
+  </div>
+  Los Superheroes del Corazon &mdash; PixelLab AI Generated &mdash; v2
+</footer>
+
+</body>
+</html>
