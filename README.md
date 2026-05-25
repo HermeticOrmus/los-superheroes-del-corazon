@@ -1,6 +1,23 @@
-# Club de los Superhéroes del Corazón 🔥
+<p align="center">
+  <img src="https://ormus.solutions/mascot/chain_braces_to_swan.gif" alt="Club de los Superhéroes del Corazón 🔥" width="128" style="image-rendering: pixelated;" />
+</p>
 
-> **"Donde los niños descubren que su mayor superpoder está dentro de su propio corazón"**
+<h1 align="center">Club de los Superhéroes del Corazón 🔥</h1>
+
+<p align="center">
+  <em>🦸‍♀️ Club de los Superhéroes del Corazón - A transformational children's club platform where kids discover their heart's superpowers through monthly missions, gamification, and emotional intelligence</em>
+</p>
+
+<p align="center">
+  <a href="https://github.com/HermeticOrmus/los-superheroes-del-corazon/stargazers"><img src="https://img.shields.io/github/stars/HermeticOrmus/los-superheroes-del-corazon?style=flat-square&color=aa8142" alt="Stars" /></a>
+  <a href="https://github.com/HermeticOrmus/los-superheroes-del-corazon/blob/main/LICENSE"><img src="https://img.shields.io/github/license/HermeticOrmus/los-superheroes-del-corazon?style=flat-square&color=aa8142" alt="License" /></a>
+  <a href="https://github.com/HermeticOrmus/los-superheroes-del-corazon/commits"><img src="https://img.shields.io/github/last-commit/HermeticOrmus/los-superheroes-del-corazon?style=flat-square&color=aa8142" alt="Last Commit" /></a>
+  <img src="https://img.shields.io/badge/Claude_Code-aa8142?style=flat-square&logo=anthropic&logoColor=white" alt="Claude Code" />
+</p>
+
+---
+
+> ****"Donde los niños descubren que su mayor superpoder está dentro de su propio corazón"****
 
 ## 🎯 Estado del Proyecto
 
