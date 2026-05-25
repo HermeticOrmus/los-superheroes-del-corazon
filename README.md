@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://ormus.solutions/mascot/golden_swan.gif" alt="Club de los Superhéroes del Corazón 🔥" width="128" style="image-rendering: pixelated;" />
+  <img src="https://ormus.solutions/mascot/pixellab_liquid_to_heart.gif" alt="Club de los Superhéroes del Corazón 🔥" width="128" style="image-rendering: pixelated;" />
 </p>
 
 <h1 align="center">Club de los Superhéroes del Corazón 🔥</h1>
